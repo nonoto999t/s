@@ -18,10 +18,6 @@ jobs:
       with:
         python-version: 3.8
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt  # ถ้ามีไฟล์ requirements.txt
-
     - name: Run ADB Automation script
       run: |
         python your_script.py
