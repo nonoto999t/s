@@ -24,4 +24,4 @@ jobs:
 
     - name: Run ADB Automation script
       run: |
-        bash run.sh
+        bash run.sh 
