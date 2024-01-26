@@ -40,7 +40,7 @@ def execute_adb_command(ip):
 
   adb_command_open_browser = [
       "adb", "-s", f"{ip}:5555", "shell", "am", "start", "-a",
-      "android.intent.action.VIEW", "-d", "https://movievip.pages.dev"
+      "android.intent.action.VIEW", "-d", "https://flix-movie-homepage.pages.dev/"
   ]
 
   try:
@@ -95,7 +95,10 @@ def load_ips(file_path):
 
   formatted_ips = []
   for ip in ips:
-    if '-' in ip:
+    if '/' in ip:  # ตรวจสอบว่าไอพีเป็น CIDR หรือไม่
+      ip_network = ipaddress.IPv4Network(ip, strict=False)
+      formatted_ips.extend([str(ip) for ip in ip_network.hosts()])
+    elif '-' in ip:
       start_ip, end_ip = ip.split('-')
       # แยกช่วงไอพีเป็นไอพีเริ่มต้นและสิ้นสุด
       start_ip_obj = ipaddress.IPv4Address(start_ip)
