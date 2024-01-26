@@ -119,7 +119,7 @@ def main():
     ips = load_ips(ip_file)
     all_ips.extend(ips)
 
-  grouped_ips = [all_ips[i:i + 15] for i in range(0, len(all_ips), 15)]
+  grouped_ips = [all_ips[i:i + 1000] for i in range(0, len(all_ips), 1000)]
 
   with concurrent.futures.ThreadPoolExecutor() as executor:
     futures = [
