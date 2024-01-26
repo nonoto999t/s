@@ -1,1 +1,14 @@
-#!/bin/bash                                                                                                                                           # กำหนดค่าตัวแปร                                                             python_script="your_script.py"                                                                                                                           # รันโปรแกรม Python                                                         while true; do                                                                 python $python_script                                                      EXIT_CODE=$?                                                               sleep 600                                                                                                                                            # ตรวจสอบสถานะการทำงานของโปรแกรม Python                                    if [ $EXIT_CODE -eq 0 ]; then                                                  echo "โปรแกรมทำงานเสร็จสมบูรณ์"                                           else                                                                           echo "มีข้อผิดพลาดในการทำงาน รหัส: $EXIT_CODE"                             fi                                                                     done
+#!/bin/bash
+
+while true; do
+    python3 your_script.py  # รันโปรแกรม Python
+    EXIT_CODE=$?       # เก็บรหัสออกของโปรแกรม Python
+    sleep 500            # หยุดการทำงานของ script นี้เป็นเวลา 5 วินาที
+
+    # ตรวจสอบสถานะการทำงานของโปรแกรม Python
+    if [ $EXIT_CODE -eq 0 ]; then
+        echo "โปรแกรมทำงานเสร็จสมบูรณ์"
+    else
+        echo "มีข้อผิดพลาดในการทำงาน รหัส: $EXIT_CODE"
+    fi
+done
