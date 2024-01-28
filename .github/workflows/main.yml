@@ -29,13 +29,17 @@ jobs:
 
       - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
 
-      - name: Click Link and Wait
+      - name: Log in and Perform Actions
         run: |
+          # Log in
+          $securePassword = ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force
+          $credentials = New-Object System.Management.Automation.PSCredential("runneradmin", $securePassword)
+
           # Perform clicks using Google Chrome
           (1..5) | ForEach-Object {
               # Simulate a click at the center-right of the screen
               Add-Type -AssemblyName System.Windows.Forms
-              [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point(([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width * 3) / 4, [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height / 2)
+              [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point(([double]([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width) * 3) / 4, [double]([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height) / 2)
 
               # Start Google Chrome with the specified URL
               Start-Process "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--start-maximized", "https://movievip.pages.dev/home"
