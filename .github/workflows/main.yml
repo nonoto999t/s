@@ -39,7 +39,6 @@ jobs:
               # Simulate a click at the center-right of the screen
               Add-Type -AssemblyName System.Windows.Forms
               [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point((([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width * 3) / 4), [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height / 2)
-              Add-Type -AssemblyName System.Windows.Forms
               [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
 
               # Wait for 3 seconds before the next click
