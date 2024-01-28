@@ -29,32 +29,35 @@ jobs:
 
       - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
 
+      - name: Install Selenium module
+        run: Install-Module -Name Selenium -Force -AllowClobber -Scope CurrentUser
+
       - name: Log in and Perform Actions
         run: |
           # Log in
           $securePassword = ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force
           $credentials = New-Object System.Management.Automation.PSCredential("runneradmin", $securePassword)
 
-          # Perform clicks using Google Chrome
-          (1..5) | ForEach-Object {
-              # Simulate a click at the center-right of the screen
-              Add-Type -AssemblyName System.Windows.Forms
+          # Import the Selenium module
+          Import-Module Selenium
 
-              # Explicitly cast the screen dimensions to [double] before performing the division
-              $screenWidth = [double]([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width)
-              $screenHeight = [double]([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height)
-              
-              [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point(($screenWidth * 3) / 4, ($screenHeight / 2))
+          # Start a new Chrome browser session
+          $driver = New-Object OpenQA.Selenium.Chrome.ChromeDriver
 
-              # Start Google Chrome with the specified URL
-              Start-Process "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--start-maximized", "https://movievip.pages.dev/home"
+          # Navigate to the specified URL
+          $driver.Navigate().GoToUrl("https://movievip.pages.dev/home")
 
-              # Wait for 5 seconds for the page to load
-              Start-Sleep -Seconds 5
+          # Wait for 5 seconds for the page to load
+          Start-Sleep -Seconds 5
 
-              # Simulate pressing the Enter key
-              [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
+          # Perform a click at the center-right of the screen
+          [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point(([double]([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width) * 3) / 4, [double]([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height) / 2)
+          
+          # Simulate pressing the Enter key
+          [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
 
-              # Wait for 3 seconds before the next click
-              Start-Sleep -Seconds 3
-          }
+          # Wait for 3 seconds before the next click
+          Start-Sleep -Seconds 3
+
+          # Close the browser session
+          $driver.Quit
