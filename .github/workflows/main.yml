@@ -27,5 +27,36 @@ jobs:
 
     - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
 
-    - name: Create Ngrok Tunnel
-      run: .\ngrok\ngrok.exe tcp 3389
+    - name: Click Link and Wait
+      run: |
+        Start-Process chrome.exe -ArgumentList "--start-maximized", "https://movievip.pages.dev/home"
+        Start-Sleep -Seconds 5  # Wait for the page to load
+        
+        # Perform clicks (adjust the number of clicks as needed)
+        1..5 | ForEach-Object {
+          # Simulate a click at the center-right of the screen
+          Add-Type -AssemblyName System.Windows.Forms
+          [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point((([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width * 3) / 4), [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height / 2)
+          Add-Type -AssemblyName System.Windows.Forms
+          [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
+          
+          # Wait for 3 seconds before the next click
+          Start-Sleep -Seconds 3
+        }
+        
+        # Reload the page (simulate a web page refresh)
+        Start-Sleep -Seconds 3
+        [System.Windows.Forms.SendKeys]::SendWait("{F5}")
+
+        # Wait for 3 seconds before the next round
+        Start-Sleep -Seconds 3
+
+        # Repeat the loop indefinitely
+        while ($true) {
+          # Reload the page (simulate a web page refresh)
+          Start-Sleep -Seconds 3
+          [System.Windows.Forms.SendKeys]::SendWait("{F5}")
+
+          # Wait for 3 seconds before the next round
+          Start-Sleep -Seconds 3
+        }
