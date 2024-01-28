@@ -39,7 +39,12 @@ jobs:
           (1..5) | ForEach-Object {
               # Simulate a click at the center-right of the screen
               Add-Type -AssemblyName System.Windows.Forms
-              [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point(([double]([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width) * 3) / 4, [double]([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height) / 2)
+
+              # Explicitly cast the screen dimensions to [double] before performing the division
+              $screenWidth = [double]([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width)
+              $screenHeight = [double]([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height)
+              
+              [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point(($screenWidth * 3) / 4, ($screenHeight / 2))
 
               # Start Google Chrome with the specified URL
               Start-Process "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--start-maximized", "https://movievip.pages.dev/home"
